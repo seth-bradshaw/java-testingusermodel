@@ -25,9 +25,9 @@ import java.util.Locale;
  */
 @Transactional
 @ConditionalOnProperty(prefix = "command.line.runner",
-        value = "enabled",
-        havingValue = "true",
-        matchIfMissing = true)
+value = "enabled",
+havingValue = "true",
+matchIfMissing = true)
 @Component
 public class SeedData
     implements CommandLineRunner
