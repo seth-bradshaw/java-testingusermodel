@@ -174,7 +174,10 @@ public class UserServiceImplUnitTestNoDB
     @Test
     public void findAll()
     {
-//        Mockito.when(userrepos.findAll().iterator().forEachRemaining())
+        Mockito.when(userrepos.findAll())
+                .thenReturn(userList);
+
+        assertEquals(5, userService.findAll().size());
     }
 
     @Test
@@ -208,6 +211,19 @@ public class UserServiceImplUnitTestNoDB
     @Test
     public void findByName()
     {
+        Mockito.when(userrepos.findByUsername("misskitty"))
+                .thenReturn(userList.get(4));
+
+        assertEquals("misskitty", userService.findByName("misskitty").getUsername());
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void findByNameNotFound()
+    {
+        Mockito.when(userrepos.findByUsername("misskitty"))
+                .thenReturn(null);
+
+        assertEquals("misskitty", userService.findByName("misskitty").getUsername());
     }
 
     @Test
@@ -312,6 +328,23 @@ public class UserServiceImplUnitTestNoDB
     @Test
     public void update()
     {
+        String newusername = "newusername";
+        String newpassword = "newpassword";
+        User u1 = new User();
+        u1.setUserid(5);
+        u1.setPassword(newpassword);
+        u1.setUsername(newusername);
+
+        Mockito.when(userrepos.save(any(User.class)))
+                .thenReturn(u1);
+
+        Mockito.when(userrepos.findById(5L))
+                .thenReturn(Optional.of(u1));
+
+        User newUser = userService.update(u1, 5);
+
+        assertNotNull(newUser);
+//        assertEquals(newpassword, newUser.getPassword());
     }
 
     @Test
